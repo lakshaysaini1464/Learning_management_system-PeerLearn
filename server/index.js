@@ -6,35 +6,44 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import courseRoute from "./routes/course.route.js";
 import mediaRoute from "./routes/media.route.js";
-import purchaseRoute from "./routes/purchaseCourse.route.js"
-import courseProgressRoute from"./routes/courseProgress.route.js";
-dotenv.config(); // Load environment variables
-import path from 'path'
+import purchaseRoute from "./routes/purchaseCourse.route.js";
+import courseProgressRoute from "./routes/courseProgress.route.js";
+import path from "path";
+
+// Load environment variables
+dotenv.config();
+
 // Connect to the database
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Default to 3000 if PORT is not set
-const CLIENT_URL = "http://localhost:5173"; // Frontend URL
+const PORT = process.env.PORT || 3000;
 
-const _dirname = path.resolve();
+// ====== ✅ CORS Setup for Interview Demos ======
+app.use(cors({
+    origin: "*",            // Allow all origins for demo/interview
+    credentials: true       // Allow sending cookies (optional)
+}));
 
 // Middleware
-app.use(cors({
-    origin: CLIENT_URL,
-    credentials: true, // Allow credentials (cookies, auth headers)
-}));
-app.use(express.json()); // Parse incoming JSON requests
-app.use(cookieParser()); // Parse cookies
+app.use(express.json());       // To parse JSON
+app.use(cookieParser());       // To parse cookies
 
-// API Routes
+// Routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/course", courseRoute);
 app.use("/api/v1/media", mediaRoute);
-app.use("/api/v1/purchase",purchaseRoute)
-app.use("/api/v1/progress",courseProgressRoute)
+app.use("/api/v1/purchase", purchaseRoute);
+app.use("/api/v1/progress", courseProgressRoute);
 
-// Test Route
+// ====== ✅ Serve Frontend (React Vite build) ======
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "client/dist")));
+app.get("*", (_, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+});
+
+// Test route
 app.get("/home", (_, res) => {
     res.status(200).json({
         success: true,
@@ -42,12 +51,7 @@ app.get("/home", (_, res) => {
     });
 });
 
-app.use(express.static(path.join(_dirname,"/client/dist")));
-app.get('*',(_,res)=>{
-    res.sendFile(path.resolve(_dirname,"client","dist","index.html"));
-})
-
-// Start Server
+// Start server
 app.listen(PORT, () => {
-    console.log(`Server is listening at http://localhost:${PORT}`);
+    console.log(`✅ Server is running on http://localhost:${PORT}`);
 });
