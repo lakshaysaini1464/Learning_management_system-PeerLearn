@@ -9,13 +9,15 @@ import mediaRoute from "./routes/media.route.js";
 import purchaseRoute from "./routes/purchaseCourse.route.js"
 import courseProgressRoute from"./routes/courseProgress.route.js";
 dotenv.config(); // Load environment variables
-
+import path from 'path'
 // Connect to the database
 connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000; // Default to 3000 if PORT is not set
 const CLIENT_URL = "http://localhost:5173"; // Frontend URL
+
+const _dirname = path.resolve();
 
 // Middleware
 app.use(cors({
@@ -39,6 +41,11 @@ app.get("/home", (_, res) => {
         message: "Hello, I am coming from the backend!",
     });
 });
+
+app.use(express.static(path.join(_dirname,"/client/dist")));
+app.get('*',(_,res)=>{
+    res.sendFile(path.resolve(_dirname,"client","dist","index.html"));
+})
 
 // Start Server
 app.listen(PORT, () => {
