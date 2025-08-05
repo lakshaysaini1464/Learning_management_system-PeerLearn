@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3000;
 
 // ====== ✅ CORS Setup for Interview Demos ======
 app.use(cors({
-    origin: "https://learning-management-system-peerlearn-1.onrender.com",            // Allow all origins for demo/interview
+    origin: "https://learning-management-system-peerlearn.onrender.com",            // Allow all origins for demo/interview
     credentials: true       // Allow sending cookies (optional)
 }));
 

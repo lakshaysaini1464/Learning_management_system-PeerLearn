@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userLoggedIn, userLoggedOut } from "../authSlice";
 import { LogOut } from "lucide-react";
 
-const USER_API = "https://learning-management-system-peerlearn-1.onrender.com/api/v1/user";
+const USER_API = "https://learning-management-system-peerlearn.onrender.com/api/v1/user";
 
 export const authApi = createApi({
     reducerPath: "authApi",
